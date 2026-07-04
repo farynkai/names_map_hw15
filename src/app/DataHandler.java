@@ -1,29 +1,28 @@
 package app;
 
-import java.util.Map;
+import java.util.List;
 
 public class DataHandler {
 
-    private final Map<Integer, String> users;
+    private final DataRepository dataRepository;
 
-    public DataHandler(Map<Integer, String> users) {
-        this.users = users;
+    public DataHandler(DataRepository dataRepository) {
+        this.dataRepository = dataRepository;
     }
 
     public String getAll() {
+        List<User> users = dataRepository.getData();
         StringBuilder sb = new StringBuilder("\nALL NAMES:\n");
-        int index = 0;
-        for (Map.Entry<Integer, String> entry : users.entrySet()) {
+        int index = 1;
+        for (User user : users) {
             sb.append(String.format("%d) id=%d, %s%n",
-                    ++index, entry.getKey(), entry.getValue()));
+                    index++, user.id(), user.name()));
         }
         return sb.toString();
     }
 
     public String getById(int id) {
-        if (users.containsKey(id)) {
-            return String.format("\nNAME: id=%d, %s", id, users.get(id));
-        }
-        return String.format("\nNo user found with id=%d", id);
+        User user = dataRepository.getById(id);
+        return String.format("\nNAME: id=%d, %s", user.id(), user.name());
     }
 }
